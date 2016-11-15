@@ -1,54 +1,48 @@
-module Language.Entity
-  ( ER(..)
-  , Entity(..)
-  , Attribute(..)
-  , Relation(..)
-  ) where
+{-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts,UndecidableInstances #-}
 
-import Data.Text
-data ER = ER { entities :: [Entity]
-             , rels :: [Relation]
-             }
-          deriving Show
+module Language.Entity where
+import Data.List
+data Attribute t name
+attr = undefined :: Attribute t name
 
-data Entity = Entity { name :: Text
-                     , attribs :: [Attribute]
-                     }
-              deriving Show
 
-instance Eq Entity where
-  e1 == e2 = name e1 == name e2
 
-instance Ord Entity where
-  e1 `compare` e2 = name e1 `compare` name e2
+data PEOPLE a; people = undefined :: PEOPLE ()
+data ID; atID = attr :: Attribute Int (PEOPLE ID); instance Show (Attribute Int (PEOPLE ID)) where show _ = "ID"
+data NAME; atName = attr :: Attribute String (PEOPLE NAME); instance Show (Attribute String (PEOPLE NAME)) where show _ = "NAME"
+data AGE; atAge = attr :: Attribute String (PEOPLE AGE); instance Show (Attribute String (PEOPLE AGE)) where show _ = "AGE"
+data CITY; atCity = attr :: Attribute String (PEOPLE CITY); instance Show (Attribute String (PEOPLE CITY)) where show _ = "CITY"
 
--- | Represents a single attribute in a particular entity.
-data Attribute = Attribute { field :: Text
-                           , pk :: Bool
-                           , fk :: Bool
-                           }
-                 deriving Show
+-- Heterogeneous type sequences
+data HNil      = HNil      deriving (Eq,Show,Read,Ord)
+data HCons e l = HCons e l deriving (Eq,Show,Read,Ord)
 
-instance Eq Attribute where
-  a1 == a2 = field a1 == field a2
+-- The set of all types of heterogeneous lists
+class HList l
+instance HList HNil
+instance HList l => HList (HCons e l)
 
-instance Ord Attribute where
-  a1 `compare` a2 = field a1 `compare` field a2
+-- Public constructors
+hNil  :: HNil
+hNil  =  HNil
 
--- Each relationship has one of four cardinalities specified for both entities.
--- Those cardinalities are: 0 or 1, exactly 1, 0 or more and 1 or more.
-data Relation = Relation { entity1, entity2 :: Text
-                         , card1,   card2   :: Cardinality
-                         }
-                deriving Show
+hCons :: HList l => e -> l -> HCons e l
+hCons e l = HCons e l
 
-data Cardinality = ZeroOne
-                 | One
-                 | ZeroPlus
-                 | OnePlus
+infixr 2 :*:
+infixr 2 .*.
 
-instance Show Cardinality where
-  show ZeroOne = "{0,1}"
-  show One = "1"
-  show ZeroPlus = "0..N"
-  show OnePlus ="1..N"
+type (:*:) e l = HCons e l
+e .*. l = HCons e l
+l .=. v = (l, v)
+
+class (HList l) => HShow l where
+    hShow :: l -> [String]
+    
+instance HShow HNil where
+    hShow HNil = []
+instance (Show e, HShow l) => HShow (HCons e l) where
+    hShow (HCons e l) = show e : hShow l
+
+
+
