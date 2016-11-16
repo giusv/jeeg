@@ -26,7 +26,7 @@ entity :: (HShow pk, HShow fs) => (pk,fs) -> Generator CompilationUnit
 entity (pk,fs) = do 
     pdecl <- return $ PackageDecl (Name [Ident "com",Ident "example"])
     idecl <- return $ [ImportDecl False (Name [Ident "java",Ident "util",Ident "ArrayList"]) False]
-    tdecl <- return $ [ClassTypeDecl $ ClassDecl [Public,Annotation MarkerAnnotation (Ident "Entity")] (Ident "People") ]
+    tdecl <- return $ [] -- [ClassTypeDecl $ ClassDecl [Public,Annotation MarkerAnnotation (Ident "Entity")] (Ident "People") ]
     return $ CompilationUnit (Just pdecl) idecl tdecl
 
 
