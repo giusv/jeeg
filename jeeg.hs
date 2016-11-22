@@ -6,11 +6,12 @@ import Language.Entity
 import Generator.Jpa
 import Generator.Commons
 import Language.Java.Pretty
+import HList.HBasic
 
 peopleSchema = (atID .*. HNil, atName .*. atAge .*. atCity .*. HNil)
 
 main = do
-    putStrLn $ prettyPrint $ runGenerator (entity peopleSchema) (Environment "fff")
+    putStrLn $ prettyPrint $ runGenerator (entity (people .=. peopleSchema)) (Environment "fff")
     
 -- import HList.CommonMain
 -- import Data.Map

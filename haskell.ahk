@@ -36,6 +36,10 @@ Return
     ; Send :set -fglasgow-exts -fallow-overlapping-instances -fallow-undecidable-instances{Enter}
     ; Sleep, 200
     Send :set -iHList{Enter}
+    Sleep, 200
+    Send :set -iText/Show{Enter}
+    Sleep, 200
+
 Return 
 
 ^n:: 

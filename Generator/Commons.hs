@@ -20,7 +20,7 @@ saveFile baseDirectory (OutputFile relativeFilePath sourceCode) =
                
 capitalize :: String -> String
 capitalize [] = []
-capitalize (h:t) = toUpper h : t
+capitalize (h:t) = toUpper h : (map toLower t)
 
 trycatch :: Doc -> [(String,Doc)] -> Doc
 trycatch try xs = 

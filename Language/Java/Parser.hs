@@ -45,6 +45,7 @@ import Prelude hiding ( exp, catch, (>>), (>>=) )
 import qualified Prelude as P ( (>>), (>>=) )
 import Data.Maybe ( isJust, catMaybes )
 import Control.Monad ( ap )
+-- import qualified Text.Show.Pretty as Pr
 
 #if __GLASGOW_HASKELL__ < 707
 import Control.Applicative ( (<$>), (<$), (<*) )
