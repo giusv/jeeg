@@ -11,7 +11,7 @@ SetTitleMatchMode, 2
 Return
 
 ^q::
-    Send :load HList.MainGhcGeneric1{Enter}
+    Send :load HList.HMap{Enter}
 Return
 
 ^r::
