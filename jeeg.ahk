@@ -11,7 +11,7 @@ SetTitleMatchMode, 2
 Return
 
 ^q::
-    Send :load HList.HMap{Enter}
+    Send :load Language.Expression{Enter}
 Return
 
 ^r::
