@@ -3,6 +3,8 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+; #AutoReload on
+
 #Hotstring EndChars 
 SetTitleMatchMode, 2
 
@@ -11,7 +13,7 @@ SetTitleMatchMode, 2
 Return
 
 ^q::
-    Send :load Language.Expression{Enter}
+    Send :load Language.Process{Enter}
 Return
 
 ^r::
@@ -49,3 +51,5 @@ Return
 ^j:: 
     WinActivate, JBoss
 Return
+
+^!r::Reload 

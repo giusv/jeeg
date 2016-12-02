@@ -1,36 +1,9 @@
 module Language.Command where
+import Language.Expression
 
 data Variable = Variable String deriving (Eq,Show)
 type Response = (Variable,Variable)
 data Skip = Skip
-data Get = Get e Response
-data PrimCommand = Skip
-                 | HttpGet Expr Response
-                 | HttpPost Expr Payload Response
-                 | HttpPatch Expr Payload Response
-                 | HttpPut Expr Payload Response
-                 | DBQuery Name Sql Variable
-                 | Assign Expr Variable
-                 | OrElse PrimCommand PrimCommand
-                 | Foreach Expr PrimCommand Variable
-                 | WithKeystore String String PrimCommand
-                 | WithNamespace [Namespace] PrimCommand
-                 | WithTimeout Int PrimCommand Variable
-                 | WithConnections [Connection] PrimCommand
-                 -- | WithProfiling [String] Int PrimCommand
-                 | Wait Expr
-                 | Assert Expr
-                 | Choose Expr PrimCommand PrimCommand
-                 | Concatenate PrimCommand PrimCommand
-                 | Navigate Navigation
-                 | FindElements By Element ElementList
-                 | FindElement By Element Element
-                 | GetAttribute Name Element Attribute
-                 | GetProperty Name Element Property
-                 | Click Element
-                 | Send String Element
-                 | Frame String
-                 | Window String
-                 | Alert
-                 
-                 
+data Get e = Get e Response
+data Post e b = Post e b Response
+data Concatenate a b = Concatenate a b

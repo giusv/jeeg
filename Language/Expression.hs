@@ -17,7 +17,4 @@ data And e1 e2 = And e1 e2 deriving (Eq,Show)
 data Equals e1 e2 = Equals e1 e2 deriving (Eq,Show)
 (*==*) :: Eq a => Expression a e  -> Expression a e -> Expression Bool (Equals e e)
 (*==*) (Expression e1) (Expression e2) = Expression (Equals e1 e2)
-    
-    
-                    
-                    
+
