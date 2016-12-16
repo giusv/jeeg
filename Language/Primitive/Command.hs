@@ -1,5 +1,5 @@
-module Language.Command where
-import Language.Expression
+module Language.Primitive.Command where
+import Language.Primitive.Expression
 
 data Variable = Variable String deriving (Eq,Show)
 type Response = (Variable,Variable)

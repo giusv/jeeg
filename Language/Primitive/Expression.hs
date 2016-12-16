@@ -1,4 +1,4 @@
-module Language.Expression where
+module Language.Primitive.Expression where
 
 data Expression a b = Expression b deriving (Eq,Show)
 
