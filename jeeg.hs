@@ -3,16 +3,29 @@
 module Jeeg where
 
 import Language.Entity
-import Generator.Jpa
-import Generator.Commons
-import Language.Java.Pretty
+-- import Generator.Jpa
+-- import Generator.Commons
+-- import Language.Java.Pretty
 import HList.HBasic
+import HList.HMap
+import HList.HApply
+import HList.HShow
 
 peopleSchema = (atID .*. HNil, atName .*. atAge .*. atCity .*. HNil)
-
+p = hMap Shw ((1 :: Int) .*. "hello" .*. hNil)
+a = hMap Shw (snd peopleSchema)
+b :: (HApply show x [Char],HApply show y [Char],HApply show z [Char]) => (x :*: y :*: z :*: HNil)
+b = hMap show (snd peopleSchema)
+main :: IO ()
 main = do
-    putStrLn $ prettyPrint $ runGenerator (entity (people .=. peopleSchema)) (Environment "fff")
-    
+    -- putStrLn $ prettyPrint $ runGenerator (entity (people .=. peopleSchema)) (Environment "fff")
+    -- let 
+    -- let p = hMap Shw ((1 :: Int) .*. hNil)
+    -- let p = hMap show (1 .*. 'a' .*. hNil)
+    -- mapM_ putStrLn (hShow p)
+    -- a
+    -- putStrLn "aaa"
+    return ()
 -- import HList.CommonMain
 -- import Data.Map
 -- import HList.GhcSyntax

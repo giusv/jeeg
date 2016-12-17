@@ -11,8 +11,8 @@ instance HList HNil
 instance HList l => HList (HCons e l)
 
 -- Public constructors
-hNil  :: HNil
-hNil  =  HNil
+hNil :: HNil
+hNil = HNil
 
 hCons :: HList l => e -> l -> HCons e l
 hCons e l = HCons e l

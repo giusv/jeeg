@@ -11,7 +11,7 @@ SetTitleMatchMode, 2
 Return
 
 ^q::
-    Send :load HList.MainGhcGeneric1{Enter}
+    Send :load HList.HMap{Enter}
 Return
 
 ^r::
@@ -31,7 +31,7 @@ Return
 Return
 
 ^d::
-    Send :cd D:\Dati\Profili\M026980\Documents\programmi\jeeg{Enter}
+    Send :cd C:\Users\GML\Documents\jeeg{Enter}
     Sleep, 200
     ; Send :set -fglasgow-exts -fallow-overlapping-instances -fallow-undecidable-instances{Enter}
     ; Sleep, 200

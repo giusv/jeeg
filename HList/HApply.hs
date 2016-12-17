@@ -21,4 +21,7 @@ data Id = Id
 
 instance HApply Id x x  where
     hApply _ x = x
-  
+
+data Shw = Shw
+instance (Show x) => HApply Shw x [Char] where
+    hApply _ x = show x
