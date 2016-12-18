@@ -1,24 +1,24 @@
--- /d/Dati/Profili/M026980/Documents/programmi/jeeg
-{-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,UndecidableInstances #-}
+{-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies #-}
 module Jeeg where
 
-import Language.Entity
--- import Generator.Jpa
--- import Generator.Commons
--- import Language.Java.Pretty
+import Language
 import HList.HBasic
-import HList.HMap
-import HList.HApply
-import HList.HShow
+import Language.Java.Syntax
+import Language.Java.Pretty
 
-peopleSchema = (atID .*. HNil, atName .*. atAge .*. atCity .*. HNil)
-p = hMap Shw ((1 :: Int) .*. "hello" .*. hNil)
-a = hMap Shw (snd peopleSchema)
-b :: (HApply show x [Char],HApply show y [Char],HApply show z [Char]) => (x :*: y :*: z :*: HNil)
-b = hMap show (snd peopleSchema)
+data PEOPLE a; people = undefined :: PEOPLE (); instance Show (PEOPLE ()) where show _ = "PEOPLE"
+data ID; atID = attr :: Attribute Int (PEOPLE ID); instance Show (Attribute Int (PEOPLE ID)) where show _ = "ID"
+data NAME; atName = attr :: Attribute String (PEOPLE NAME); instance Show (Attribute String (PEOPLE NAME)) where show _ = "NAME"
+data AGE; atAge = attr :: Attribute String (PEOPLE AGE); instance Show (Attribute String (PEOPLE AGE)) where show _ = "AGE"
+data CITY; atCity = attr :: Attribute String (PEOPLE CITY); instance Show (Attribute String (PEOPLE CITY)) where show _ = "CITY"
+
+peopleEntity = entity people (atID .*. HNil) (atName .*. atAge .*. atCity .*. HNil)
+-- p = hMap Shw ((1 :: Int) .*. "hello" .*. hNil)
+-- a = hMap Shw (snd peopleSchema)
+-- b = hMap show (snd peopleSchema)
 main :: IO ()
 main = do
-    -- putStrLn $ prettyPrint $ runGenerator (entity (people .=. peopleSchema)) (Environment "fff")
+    putStrLn $ prettyPrint $ runGenerator ((code peopleEntity) :: Generator CompilationUnit) (Environment "fff")
     -- let 
     -- let p = hMap Shw ((1 :: Int) .*. hNil)
     -- let p = hMap show (1 .*. 'a' .*. hNil)

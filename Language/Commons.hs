@@ -1,4 +1,4 @@
-module Generator.Commons where
+module Language.Commons where
 import Text.PrettyPrint
 import Text.Printf
 import System.FilePath
