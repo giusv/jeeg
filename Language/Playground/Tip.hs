@@ -1,11 +1,11 @@
 {-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts #-}
 
-module Language.Primitive.Entity where
-import Language.Primitive.Attribute
-import Language.Commons
-import HList.HBasic
-import Language.Java.Syntax
-import Language.Artifact.Code
-import Control.Monad
+module Language.Playground.Tip where
 
-data Tip = Tip Int
+data Tip a = Tip a
+
+instance (Show a) => Show (Tip a) where
+  show (Tip a) = "Tip " ++ show a
+
+
+
