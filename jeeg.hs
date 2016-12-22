@@ -7,10 +7,30 @@ import Language.Java.Syntax
 import Language.Java.Pretty
 
 data PEOPLE a; people = undefined :: PEOPLE (); instance Show (PEOPLE ()) where show _ = "PEOPLE"
-data ID; atID = attr :: Attribute Int (PEOPLE ID); instance Show (Attribute Int (PEOPLE ID)) where show _ = "ID"
-data NAME; atName = attr :: Attribute String (PEOPLE NAME); instance Show (Attribute String (PEOPLE NAME)) where show _ = "NAME"
-data AGE; atAge = attr :: Attribute String (PEOPLE AGE); instance Show (Attribute String (PEOPLE AGE)) where show _ = "AGE"
-data CITY; atCity = attr :: Attribute String (PEOPLE CITY); instance Show (Attribute String (PEOPLE CITY)) where show _ = "CITY"
+
+data ID; atID = attr :: Attribute Int (PEOPLE ID);
+instance ShowAttribute (Attribute Int (PEOPLE ID)) where
+  showName _ = "ID"
+  showType _ = "int"
+
+data NAME; atName = attr :: Attribute String (PEOPLE NAME);
+instance ShowAttribute (Attribute String (PEOPLE NAME)) where
+  showName _ = "NAME"
+  showType _ = "String"
+
+data AGE; atAge = attr :: Attribute Int (PEOPLE AGE);
+instance ShowAttribute (Attribute Int (PEOPLE AGE)) where
+  showName _ = "AGE"
+  showType _ = "int"
+  
+data CITY; atCity = attr :: Attribute String (PEOPLE CITY); 
+instance ShowAttribute (Attribute String (PEOPLE CITY)) where
+  showName _ = "CITY"
+  showType _ = "String"
+  
+
+
+
 
 peopleEntity = entity people (atID .*. HNil) (atName .*. atAge .*. atCity .*. HNil)
 -- p = hMap Shw ((1 :: Int) .*. "hello" .*. hNil)

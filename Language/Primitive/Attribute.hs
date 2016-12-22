@@ -10,32 +10,39 @@ import Control.Monad
 data EFields = EFields {eFields :: [Decl]}
 data EAccessors = EAccessors {eAccessors :: [Decl]}
 
+class ShowAttribute a where
+  showName :: a -> String
+  showType :: a -> String
+
 
 data Attribute t name
 attr = undefined :: Attribute t name
 
-instance Show (Attribute t name) => Code (Attribute t name) EFields where
-    code a = do 
-        let name = show a
+instance ShowAttribute (Attribute t name) => Code (Attribute t name) ([Modifier] -> EFields) where
+    code a anns = do 
+        let nm = showName a
+        let tp = showType a
         return $ 
             EFields 
                 [ MemberDecl 
                     (FieldDecl
+                       anns ++ 
                        [ Annotation
                            (NormalAnnotation
                             { annName = Name [Ident "Column"]
                             , annKV =
                                 [ ( Ident "name"
-                                  , EVVal (InitExp (Lit (String name))))
+                                  , EVVal (InitExp (Lit (String $ upperCase nm))))
                                 ]
                             })
                        ]
-                       (RefType (ClassRefType (ClassType [(Ident "String", [])])))
-                       [VarDecl (VarId (Ident name)) Nothing])]
+                       (RefType (ClassRefType (ClassType [(Ident tp, [])])))
+                       [VarDecl (VarId (Ident $ lowerCase nm)) Nothing])]
                            
-instance Show (Attribute t name) => Code (Attribute t name) EAccessors where
+instance ShowAttribute (Attribute t name) => Code (Attribute t name) EAccessors where
     code a = do 
-        let name = show a
+        let nm = showName a
+        let tp = showType a
         return $ 
             EAccessors 
                 [ MemberDecl
@@ -43,28 +50,28 @@ instance Show (Attribute t name) => Code (Attribute t name) EAccessors where
                        [Public]
                        []
                        (Just
-                          (RefType (ClassRefType (ClassType [(Ident "String", [])]))))
-                       (Ident $ "get" ++ capitalize name)
+                          (RefType (ClassRefType (ClassType [(Ident $ tp, [])]))))
+                       (Ident $ "get" ++ capitalize nm)
                        []
                        []
                        (MethodBody
                           (Just
                              (Block
                                 [ BlockStmt
-                                    (Return (Just (ExpName (Name [Ident name]))))
+                                    (Return (Just (ExpName (Name [Ident $ lowerCase nm]))))
                                 ]))))
                 , MemberDecl
                     (MethodDecl
                        [Public]
                        []
                        Nothing
-                       (Ident $ "set" ++ capitalize name)
+                       (Ident $ "set" ++ capitalize nm)
                        [ FormalParam
                            []
                            (RefType
-                              (ClassRefType (ClassType [(Ident "String", [])])))
+                              (ClassRefType (ClassType [(Ident tp, [])])))
                            False
-                           (VarId (Ident name))
+                           (VarId (Ident $ lowerCase nm))
                        ]
                        []
                        (MethodBody
@@ -76,9 +83,9 @@ instance Show (Attribute t name) => Code (Attribute t name) EAccessors where
                                           (FieldLhs
                                              (PrimaryFieldAccess
                                                 This
-                                                (Ident name)))
+                                                (Ident $ lowerCase nm)))
                                           EqualA
-                                          (ExpName (Name [Ident name]))))
+                                          (ExpName (Name [Ident $ lowerCase nm]))))
                                 ]))))
                 ]
 

@@ -16,11 +16,11 @@ instance (Show e) => Show (Entity e k a) where
 entity :: (HList k, HList a) => e -> k -> a -> Entity e k a
 entity e k a = Entity e k a
 
-instance Code HNil EFields where
-    code _ = return $ EFields []
+instance Code HNil ([Modifier] -> EFields) where
+    code _ _ = return $ EFields []
     
-instance (Code e EFields, Code l EFields) => Code (HCons e l) EFields where
-    code (HCons e l) = liftM EFields (liftM2 (++) (liftM eFields (code e)) (liftM eFields (code l)))
+instance (Code e ([Modifier] -> EFields), Code l ([Modifier] -> EFields)) => Code (HCons e l) ([Modifier] -> EFields) where
+    code (HCons e l) ann = liftM EFields (liftM2 (++) (liftM eFields (code e ann)) (liftM eFields (code l ann)))
 
 instance Code HNil EAccessors where
     code _ = return $ EAccessors []
@@ -29,13 +29,14 @@ instance (Code e EAccessors, Code l EAccessors) => Code (HCons e l) EAccessors w
     code (HCons e l) = liftM EAccessors (liftM2 (++) (liftM eAccessors (code e)) (liftM eAccessors (code l)))
 
 
-instance (Code k EFields, Code k EAccessors,
-          Code a EFields, Code a EAccessors,
+instance (Code k ([Modifier] -> EFields), Code k EAccessors,
+          Code a ([Modifier] -> EFields), Code a EAccessors,
           Show e) 
           => Code (Entity e k a) CompilationUnit where
-    code (Entity e k a) = do 
-            (EFields k') <- code k 
-            (EFields a') <- code a
+    code (Entity e k a) = do
+      let anns = [MarkerAnnotation {annName = Name [Ident "Id"]}]
+            (EFields k') <- code k anns
+            (EFields a') <- code a 
             (EAccessors k'') <- code k
             (EAccessors a'') <- code a
             return $ CompilationUnit
