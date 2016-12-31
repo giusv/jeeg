@@ -1,14 +1,15 @@
 {-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts #-}
 
 module Language.Primitive.Attribute where
+import Language.Primitive.Expression
 import Language.Commons
-import HList.HBasic
+import MyHList.HBasic
 import Language.Java.Syntax
+import HList.CommonMain
 import Language.Artifact.Code
 import Control.Monad
 
-data EFields = EFields {eFields :: [Decl]}
-data EAccessors = EAccessors {eAccessors :: [Decl]}
+type EMembers = [Decl]
 
 class ShowAttribute a where
   showName :: a -> String
@@ -17,35 +18,38 @@ class ShowAttribute a where
 
 data Attribute t name
 attr = undefined :: Attribute t name
+data Constraint e a = Primary
+                    | Foreign e a Cardinality 
+data Cardinality = OneToOne
+                 | OneToMany
+                 | ManyToOne
+                 deriving (Show)
 
-instance ShowAttribute (Attribute t name) => Code (Attribute t name) ([Modifier] -> EFields) where
-    code a anns = do 
+data AttrExpr t name = AttrExpr (Attribute t name) 
+fromAttribute :: Attribute t name -> Expression t (AttrExpr t name)
+fromAttribute attr = Expression (AttrExpr attr)
+
+
+instance ShowAttribute (Attribute t name) => Code (Attribute t name) EMembers where
+    code a =
         let nm = showName a
-        let tp = showType a
-        return $ 
-            EFields 
-                [ MemberDecl 
-                    (FieldDecl
-                       anns ++ 
-                       [ Annotation
-                           (NormalAnnotation
-                            { annName = Name [Ident "Column"]
-                            , annKV =
-                                [ ( Ident "name"
-                                  , EVVal (InitExp (Lit (String $ upperCase nm))))
-                                ]
-                            })
-                       ]
-                       (RefType (ClassRefType (ClassType [(Ident tp, [])])))
-                       [VarDecl (VarId (Ident $ lowerCase nm)) Nothing])]
-                           
-instance ShowAttribute (Attribute t name) => Code (Attribute t name) EAccessors where
-    code a = do 
-        let nm = showName a
-        let tp = showType a
-        return $ 
-            EAccessors 
-                [ MemberDecl
+            tp = showType a
+            anns = []
+        in [ MemberDecl 
+                (FieldDecl
+                   (anns ++ 
+                   [ Annotation
+                       (NormalAnnotation
+                        { annName = Name [Ident "Column"]
+                        , annKV =
+                            [ ( Ident "name"
+                              , EVVal (InitExp (Lit (String $ upperCase nm))))
+                            ]
+                        })
+                   ])
+                   (RefType (ClassRefType (ClassType [(Ident tp, [])])))
+                   [VarDecl (VarId (Ident $ lowerCase nm)) Nothing])
+            , MemberDecl
                     (MethodDecl
                        [Public]
                        []
@@ -60,7 +64,7 @@ instance ShowAttribute (Attribute t name) => Code (Attribute t name) EAccessors 
                                 [ BlockStmt
                                     (Return (Just (ExpName (Name [Ident $ lowerCase nm]))))
                                 ]))))
-                , MemberDecl
+            , MemberDecl
                     (MethodDecl
                        [Public]
                        []
@@ -87,5 +91,5 @@ instance ShowAttribute (Attribute t name) => Code (Attribute t name) EAccessors 
                                           EqualA
                                           (ExpName (Name [Ident $ lowerCase nm]))))
                                 ]))))
-                ]
+            ]
 

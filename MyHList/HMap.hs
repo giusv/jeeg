@@ -1,8 +1,8 @@
 {-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts,UndecidableInstances #-}
-module HList.HMap where
-import HList.HBasic
-import HList.HApply
-import HList.HFoldr
+module MyHList.HMap where
+import MyHList.HBasic
+import MyHList.HApply
+import MyHList.HFoldr
 
 data HMap f = HMap f
 

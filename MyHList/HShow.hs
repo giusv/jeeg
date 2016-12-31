@@ -1,5 +1,5 @@
-module HList.HShow where
-import HList.HBasic
+module MyHList.HShow where
+import MyHList.HBasic
 
 class (HList l) => HShow l where
     hShow :: l -> [String]

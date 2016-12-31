@@ -1,6 +1,6 @@
 {-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts,UndecidableInstances #-}
-module HList.HApply where
-import HList.HBasic
+module MyHList.HApply where
+import MyHList.HBasic
 
 class HApply f a r | f a -> r where
     hApply :: f -> a -> r

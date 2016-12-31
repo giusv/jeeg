@@ -1,5 +1,5 @@
 {-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts,UndecidableInstances #-}
-module HList.HBasic where
+module MyHList.HBasic where
 
 -- Heterogeneous type sequences
 data HNil      = HNil      deriving (Eq,Show,Read,Ord)

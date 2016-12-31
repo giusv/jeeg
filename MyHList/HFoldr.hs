@@ -1,7 +1,7 @@
 {-#LANGUAGE TypeOperators,FlexibleInstances,MultiParamTypeClasses,FunctionalDependencies,FlexibleContexts,UndecidableInstances #-}
-module HList.HFoldr where
-import HList.HBasic
-import HList.HApply
+module MyHList.HFoldr where
+import MyHList.HBasic
+import MyHList.HApply
 
 class HList l => HFoldr f v l r | f v l -> r where
     hFoldr :: f -> v -> l -> r
@@ -13,8 +13,8 @@ instance (HFoldr f v l r, HApply f (e,r) r')
        => HFoldr f v (HCons e l) r' where
     hFoldr f v (HCons e l) = hApply f (e, hFoldr f v l)
 
-hAppend :: HFoldr ApplyHCons v l r => l -> v -> r
-hAppend l v = hFoldr ApplyHCons v l
+-- hAppend :: HFoldr ApplyHCons v l r => l -> v -> r
+-- hAppend l v = hFoldr ApplyHCons v l
 
 
 -- hMap :: (HFoldr f HNil l r) => f -> l -> r
