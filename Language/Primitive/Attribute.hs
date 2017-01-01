@@ -3,9 +3,10 @@
 module Language.Primitive.Attribute where
 import Language.Primitive.Expression
 import Language.Commons
-import MyHList.HBasic
+--import MyHList.HBasic
 import Language.Java.Syntax
 import HList.CommonMain
+import HList.GhcSyntax
 import Language.Artifact.Code
 import Control.Monad
 
@@ -18,14 +19,14 @@ class ShowAttribute a where
 
 data Attribute t name
 attr = undefined :: Attribute t name
-data Constraint e a = Primary
-                    | Foreign e a Cardinality 
-data Cardinality = OneToOne
-                 | OneToMany
-                 | ManyToOne
-                 deriving (Show)
 
-data AttrExpr t name = AttrExpr (Attribute t name) 
+class Attributes a
+instance Attributes HNil
+instance (Attributes l) => Attributes (HCons (n :=: a) l)
+
+
+data AttrExpr t name = AttrExpr (Attribute t name)
+--                     deriving (Show)
 fromAttribute :: Attribute t name -> Expression t (AttrExpr t name)
 fromAttribute attr = Expression (AttrExpr attr)
 

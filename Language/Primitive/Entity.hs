@@ -2,9 +2,11 @@
 
 module Language.Primitive.Entity where
 import Language.Primitive.Attribute
+import Language.Primitive.Constraint
 import Language.Commons
 -- import MyHList.HBasic
 import HList.CommonMain
+import HList.GhcSyntax
 import Language.Java.Syntax
 import Language.Artifact.Code
 import Control.Monad
@@ -14,15 +16,14 @@ data Entity e a c = Entity e a c
 instance (Show e) => Show (Entity e a c) where
     show (Entity e _ _) = show e
 
-entity :: (HList a, HList c) => e -> a -> c -> Entity e a c
+entity :: (Attributes a, Constraints c) => e -> a -> c -> Entity e a c
 entity e a c = Entity e a c
 
 instance Code HNil EMembers where
     code _ = []
     
-instance (Code v EMembers, Code l EMembers) => Code (HCons (k,v) l) EMembers where
+instance (Code v EMembers, Code l EMembers) => Code (HCons (k :=: v) l) EMembers where
     code (HCons (k,v) l) =  code v ++ code l
-
 
 instance (Code a EMembers, Show e) 
           => Code (Entity e a c) CompilationUnit where
