@@ -29,3 +29,16 @@ data Cardinality = OneToOne
                  deriving (Show)
 
 
+-- class Constraints a
+-- instance Constraints HNil
+-- instance (Constraints l) => Constraints (HCons (PrimaryKey pk) l)
+-- instance (Constraints l) => Constraints (HCons (ForeignKey fk t pk) l)
+
+
+-- data PrimaryKey pk = PrimaryKey pk
+-- pk :: (HList pk) => pk -> PrimaryKey pk
+-- pk k = PrimaryKey k
+
+-- data ForeignKey fk t pk = ForeignKey fk t pk Cardinality
+-- fk :: (HList pk,HList fk) => pk -> t -> fk -> Cardinality -> ForeignKey pk t fk
+-- fk k t pk card = ForeignKey k t pk card

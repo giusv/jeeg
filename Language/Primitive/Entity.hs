@@ -11,13 +11,13 @@ import Language.Java.Syntax
 import Language.Artifact.Code
 import Control.Monad
 
-data Entity e a c = Entity e a c
+data Entity e a = Entity e a
 
-instance (Show e) => Show (Entity e a c) where
-    show (Entity e _ _) = show e
+instance (Show e) => Show (Entity e a) where
+    show (Entity e _) = show e
 
-entity :: (Attributes a, Constraints c) => e -> a -> c -> Entity e a c
-entity e a c = Entity e a c
+entity :: (Attributes a) => e -> a -> Entity e a
+entity e a = Entity e a
 
 instance Code HNil EMembers where
     code _ = []
@@ -26,8 +26,8 @@ instance (Code v EMembers, Code l EMembers) => Code (HCons (k :=: v) l) EMembers
     code (HCons (k,v) l) =  code v ++ code l
 
 instance (Code a EMembers, Show e) 
-          => Code (Entity e a c) CompilationUnit where
-    code (Entity e a c) = 
+          => Code (Entity e a) CompilationUnit where
+    code (Entity e a) = 
       let a' = code a
         in CompilationUnit
           (Just

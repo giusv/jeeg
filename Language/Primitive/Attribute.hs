@@ -17,21 +17,21 @@ class ShowAttribute a where
   showType :: a -> String
 
 
-data Attribute t name
-attr = undefined :: Attribute t name
+data Attribute t name cons
+attr = undefined :: Attribute t name cons
 
 class Attributes a
 instance Attributes HNil
 instance (Attributes l) => Attributes (HCons (n :=: a) l)
 
 
-data AttrExpr t name = AttrExpr (Attribute t name)
+data AttrExpr t name cons = AttrExpr (Attribute t name cons)
 --                     deriving (Show)
-fromAttribute :: Attribute t name -> Expression t (AttrExpr t name)
+fromAttribute :: Attribute t name cons -> Expression t (AttrExpr t name cons)
 fromAttribute attr = Expression (AttrExpr attr)
 
 
-instance ShowAttribute (Attribute t name) => Code (Attribute t name) EMembers where
+instance ShowAttribute (Attribute t name cons) => Code (Attribute t name cons) EMembers where
     code a =
         let nm = showName a
             tp = showType a

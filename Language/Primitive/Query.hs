@@ -34,8 +34,8 @@ instance (Scheme q s) => Scheme (RestrictQ e q) s where
 instance (Scheme q1 s1, Scheme q2 s2, HAppend s1 s2 s, HList s) => Scheme (TimesQ q1 q2) s where
   scheme (TimesQ q1 q2) = hAppend (scheme q1) (scheme q2)
 
-table :: Entity e a c -> TableQ a
-table (Entity _ a _) = TableQ a
+table :: Entity e a -> TableQ a
+table (Entity _ a) = TableQ a
 
 restrict :: Expression Bool a -> q -> RestrictQ (Expression Bool a) q
 restrict e q = RestrictQ e q
